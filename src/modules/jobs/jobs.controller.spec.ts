@@ -17,6 +17,7 @@ describe('JobsController', () => {
             findAll: jest.fn(),
             findOne: jest.fn(),
             getHistory: jest.fn(),
+            getActive: jest.fn(),
             getDownloadUrl: jest.fn(),
             getColegioStats: jest.fn(),
             getColegioJobs: jest.fn(),
@@ -46,6 +47,19 @@ describe('JobsController', () => {
     const result = await controller.getHistory(authorization);
     expect(jobsService.getHistory).toHaveBeenCalledWith(authorization);
     expect(result).toEqual({ data: [] });
+  });
+
+  it('getActive should delegate to jobsService.getActive', async () => {
+    jobsService.getActive.mockResolvedValue({ active: null });
+    const result = await controller.getActive(authorization);
+    expect(jobsService.getActive).toHaveBeenCalledWith(authorization);
+    expect(result).toEqual({ active: null });
+  });
+
+  it('declara la ruta active antes de :id (si no, "active" se leería como un id)', () => {
+    const metodos = Object.getOwnPropertyNames(JobsController.prototype);
+    expect(metodos.indexOf('getActive')).toBeGreaterThan(-1);
+    expect(metodos.indexOf('getActive')).toBeLessThan(metodos.indexOf('findOne'));
   });
 
   it('getColegioStats should delegate to jobsService.getColegioStats', async () => {

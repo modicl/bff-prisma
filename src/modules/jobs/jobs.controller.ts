@@ -86,6 +86,13 @@ export class JobsController {
     return this.jobsService.getColegioJobs(colegioId, query, authorization);
   }
 
+  // Debe ir ANTES de ':id': si no, "active" se leería como un id de job.
+  @Get('active')
+  @ApiOperation({ summary: 'Flujo activo del docente (para retomarlo)' })
+  getActive(@Headers('authorization') authorization: string) {
+    return this.jobsService.getActive(authorization);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Obtener job por ID' })
   findOne(@Param('id') id: string, @Headers('authorization') authorization: string) {

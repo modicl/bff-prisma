@@ -58,6 +58,10 @@ export class JobsService {
     return this.client.get('docs', '/api/jobs/history', { authToken });
   }
 
+  async getActive(authToken: string) {
+    return this.client.get('docs', '/api/jobs/active', { authToken });
+  }
+
   async getDownloadUrl(id: string, authToken: string) {
     return this.client.get('docs', `/api/jobs/${id}/download`, { authToken });
   }

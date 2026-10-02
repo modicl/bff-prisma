@@ -47,6 +47,12 @@ describe('JobsService', () => {
     expect(client.get).toHaveBeenCalledWith('docs', '/api/jobs/history', { authToken });
   });
 
+  it('getActive should call client.get', async () => {
+    client.get.mockResolvedValue({ active: null });
+    await service.getActive(authToken);
+    expect(client.get).toHaveBeenCalledWith('docs', '/api/jobs/active', { authToken });
+  });
+
   it('getDownloadUrl should call client.get with id', async () => {
     client.get.mockResolvedValue({ url: 'http://example.com/file' });
     await service.getDownloadUrl('j1', authToken);
