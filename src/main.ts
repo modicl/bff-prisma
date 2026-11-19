@@ -6,6 +6,8 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // Sin esto, onModuleDestroy (drenaje del publicador de actividad) no corre al recibir SIGTERM en ECS.
+  app.enableShutdownHooks();
   const configService = app.get(ConfigService);
   const logger = new Logger('Bootstrap');
 

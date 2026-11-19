@@ -1,4 +1,6 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ActivityModule } from './infrastructure/activity/activity.module';
+import { ActivityMiddleware } from './infrastructure/activity/activity.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { HealthController } from './health.controller';
 import { MicroserviceClientModule } from './infrastructure/microservice-client/microservice.module';
@@ -14,6 +16,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MicroserviceClientModule,
+    ActivityModule,
     AuthModule,
     ColegiosModule,
     ProfessorsModule,
@@ -24,4 +27,8 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
   ],
   controllers: [HealthController],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(c: MiddlewareConsumer) {
+    c.apply(ActivityMiddleware).forRoutes('*');
+  }
+}
